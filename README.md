@@ -87,7 +87,6 @@ java -jar katlocker-1.0.0.jar
 | `katlocker-1.0.0.jar` | Ejecutable principal (incluye todas las dependencias) |
 | `run-katlocker.bat` | Launcher para Windows |
 | `run-katlocker.sh` | Launcher para Linux/macOS |
-| `README.md` | Documentación en inglés |
 | `GUIA_USO.md` | Guía completa en español |
 
 ---
