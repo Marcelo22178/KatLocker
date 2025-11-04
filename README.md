@@ -163,3 +163,7 @@ _(El icono aparece en la bandeja del sistema con indicadores verde/rojo según e
 ---
 
 **Descarga los archivos y protege tu trabajo hoy mismo!** 🐱💻
+
+
+![Imagen de WhatsApp 2025-11-04 a las 11 50 27_09ae784e](https://github.com/user-attachments/assets/0e1b1813-b17e-4cdc-bb73-72e240d9b6bf)
+
