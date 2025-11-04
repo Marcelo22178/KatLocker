@@ -1,4 +1,5 @@
 katlocker\InputBlocker.class
 katlocker\Main.class
+katlocker\TrayIcon.class
 katlocker\HotkeyListener.class
 katlocker\LockManager.class
