@@ -1,10 +1,11 @@
 package katlocker;
 
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import javax.swing.*;
+import com.github.kwhat.jnativehook.GlobalScreen;
+import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
+import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 
-public class HotkeyListener {
+public class HotkeyListener implements NativeKeyListener {
+
     private final LockManager lockManager;
 
     public HotkeyListener(LockManager lockManager) {
@@ -12,37 +13,31 @@ public class HotkeyListener {
     }
 
     public void startListening() {
-        setupTrayIcon();
-
-        JOptionPane.showMessageDialog(null,
-            "KatLock ejecutándose.\nPresiona CTRL + ALT + K para activar/desactivar el bloqueo.",
-            "KatLock", JOptionPane.INFORMATION_MESSAGE);
-
-        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(e -> {
-            if (e.getID() == KeyEvent.KEY_PRESSED &&
-                e.isControlDown() && e.isAltDown() && e.getKeyCode() == KeyEvent.VK_K) {
-                lockManager.toggleLock();
-            }
-            return false;
-        });
-
-        while (true) {
-            try { Thread.sleep(1000); } catch (InterruptedException ignored) {}
-        }
-    }
-
-    private void setupTrayIcon() {
-        if (!SystemTray.isSupported()) return;
         try {
-            SystemTray tray = SystemTray.getSystemTray();
-            TrayIcon icon = new TrayIcon(
-                Toolkit.getDefaultToolkit().createImage(""),
-                "KatLock - Protección anti gatos 😼"
-            );
-            icon.setImageAutoSize(true);
-            tray.add(icon);
+            GlobalScreen.registerNativeHook();
+            System.out.println("🟢 Escuchando tecla global: F1");
+            System.out.println("💡 Presiona F1 para activar/desactivar el bloqueo");
         } catch (Exception e) {
-            System.err.println("No se pudo agregar al área de notificación.");
+            e.printStackTrace();
+        }
+
+        GlobalScreen.addNativeKeyListener(this);
+    }
+
+    @Override
+    public void nativeKeyPressed(NativeKeyEvent e) {
+        // Solo F1 para activar/desactivar
+        if (e.getKeyCode() == NativeKeyEvent.VC_F1) {
+            System.out.println("🎯 F1 presionada - cambiando modo bloqueo...");
+            lockManager.toggleLock();
         }
     }
+
+    @Override
+    public void nativeKeyReleased(NativeKeyEvent e) {
+        // No necesitamos manejar liberación de teclas para F1
+    }
+
+    @Override
+    public void nativeKeyTyped(NativeKeyEvent e) {}
 }
