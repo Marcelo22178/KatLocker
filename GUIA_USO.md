@@ -33,7 +33,7 @@ Al iniciar KatLocker, verás un icono de candado en la bandeja del sistema (Syst
 
 ### Acciones Rápidas
 - **Doble clic** en el icono = Activar/Desactivar bloqueo
-- **Presionar F1** = Activar/Desactivar bloqueo
+- **Presionar Ctrl+Alt+L** = Activar/Desactivar bloqueo
 
 ## 🔒 Modo Bloqueado
 

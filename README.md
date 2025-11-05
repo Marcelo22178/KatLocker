@@ -9,7 +9,7 @@
 ## ✨ Características Principales
 
 - 🔒 **Bloqueo Total Real** - Bloquea completamente teclado y mouse (no solo visual)
-- 🎯 **Activación Simple** - Presiona `F1` para activar/desactivar
+- 🎯 **Activación Simple** - Presiona `Ctrl+Alt+L` para activar/desactivar
 - 🖼️ **Interfaz Gráfica** - Icono intuitivo en la bandeja del sistema
 - 🎨 **Indicadores Visuales** - Verde (desbloqueado) / Rojo (bloqueado)
 - 🌍 **Multiplataforma** - Windows, macOS y Linux
@@ -43,7 +43,7 @@ java -jar katlocker-1.0.0.jar
 ## 🎮 Uso
 
 ### Activar/Desactivar Bloqueo
-- **Método 1:** Presiona `F1`
+- **Método 1:** Presiona `Ctrl+Alt+L`
 - **Método 2:** Doble clic en el icono de la bandeja
 
 ### Menú del Icono (Clic Derecho)
@@ -56,7 +56,7 @@ java -jar katlocker-1.0.0.jar
 - ❌ Teclado completamente bloqueado
 - ❌ Mouse bloqueado en el centro
 - ❌ Clics deshabilitados
-- ✅ Solo F1 funciona para desbloquear
+- ✅ Solo Ctrl+Alt+L funciona para desbloquear
 - 🔊 Sonido de alerta al presionar teclas
 
 ---
@@ -106,7 +106,7 @@ java -jar katlocker-1.0.0.jar
 - ✨ Release inicial
 - ✅ Bloqueo completo de teclado y mouse
 - ✅ Interfaz gráfica con System Tray
-- ✅ Activación con F1
+- ✅ Activación con Ctrl+Alt+L
 - ✅ Indicadores visuales de estado
 - ✅ Soporte multiplataforma
 - ✅ Notificaciones y menú contextual
@@ -159,7 +159,7 @@ _(El icono aparece en la bandeja del sistema con indicadores verde/rojo según e
 - 🔴 Icono rojo en la bandeja
 - Mouse centrado y bloqueado
 - Teclado completamente bloqueado
-- Solo F1 funciona
+- Solo Ctrl+Alt+L funciona
 
 ---
 

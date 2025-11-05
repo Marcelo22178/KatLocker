@@ -30,4 +30,4 @@ echo ""
 java -jar katlocker-1.0.0.jar &
 
 echo "KatLocker is running in the background."
-echo "Press F1 to lock/unlock keyboard and mouse."
+echo "Press Ctrl+Alt+L to lock/unlock keyboard and mouse."

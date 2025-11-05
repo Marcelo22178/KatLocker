@@ -2,8 +2,9 @@ package katlocker;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.io.File;
 
 public class TrayIcon {
     
@@ -52,7 +53,7 @@ public class TrayIcon {
         popup.addSeparator();
         
         // Item para activar/desactivar
-        MenuItem toggleItem = new MenuItem("Activar Bloqueo (F1)");
+        MenuItem toggleItem = new MenuItem("Activar Bloqueo (Ctrl+Alt+L)");
         toggleItem.addActionListener(e -> {
             lockManager.toggleLock();
             updateTrayIcon(!isLocked);
@@ -88,7 +89,7 @@ public class TrayIcon {
         try {
             tray.add(trayIcon);
             trayIcon.displayMessage("KatLocker Iniciado", 
-                                   "Presiona F1 para activar/desactivar el bloqueo\nDoble clic en el icono también funciona", 
+                                   "Presiona Ctrl+Alt+L para activar/desactivar el bloqueo\nDoble clic en el icono también funciona", 
                                    java.awt.TrayIcon.MessageType.INFO);
         } catch (AWTException e) {
             System.err.println("❌ Error al agregar icono a la bandeja: " + e.getMessage());
@@ -114,49 +115,83 @@ public class TrayIcon {
             
             if (popup.getItemCount() > 2) {
                 MenuItem toggleItem = popup.getItem(2);
-                toggleItem.setLabel(locked ? "Desactivar Bloqueo (F1)" : "Activar Bloqueo (F1)");
+                toggleItem.setLabel(locked ? "Desactivar Bloqueo (Ctrl+Alt+L)" : "Activar Bloqueo (Ctrl+Alt+L)");
             }
         }
     }
     
-    // Crear icono de candado
+    // Crear icono usando gato.png
     private Image createLockIcon(boolean locked) {
+        try {
+            // Cargar el icono gato.png desde el directorio raíz del proyecto
+            File iconFile = new File("gato.png");
+            if (iconFile.exists()) {
+                BufferedImage originalImage = ImageIO.read(iconFile);
+                
+                // Redimensionar para el tray (16x16 píxeles)
+                int size = 16;
+                BufferedImage scaledImage = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g = scaledImage.createGraphics();
+                
+                // Configurar para mejor calidad de escalado
+                g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+                g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+                
+                // Dibujar la imagen escalada
+                g.drawImage(originalImage, 0, 0, size, size, null);
+                
+                // Aplicar un filtro de color según el estado
+                if (locked) {
+                    // Aplicar un tinte rojizo sutil cuando está bloqueado
+                    g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
+                    g.setColor(new Color(255, 0, 0, 100));
+                    g.fillRect(0, 0, size, size);
+                } else {
+                    // Aplicar un tinte verdoso sutil cuando está desbloqueado
+                    g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f));
+                    g.setColor(new Color(0, 255, 0, 80));
+                    g.fillRect(0, 0, size, size);
+                }
+                
+                g.dispose();
+                return scaledImage;
+            } else {
+                System.out.println("⚠️ Archivo gato.png no encontrado, usando icono por defecto");
+                return createDefaultIcon(locked);
+            }
+        } catch (Exception e) {
+            System.err.println("❌ Error cargando gato.png: " + e.getMessage());
+            return createDefaultIcon(locked);
+        }
+    }
+    
+    // Icono de respaldo si no se puede cargar gato.png
+    private Image createDefaultIcon(boolean locked) {
         int size = 16;
         BufferedImage image = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = image.createGraphics();
         
-        // Activar antialiasing
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         
         if (locked) {
-            // Candado cerrado - ROJO
-            g.setColor(new Color(220, 50, 50));
-            
-            // Cuerpo del candado
-            g.fillRoundRect(4, 8, 8, 7, 2, 2);
-            
-            // Arco del candado (cerrado)
-            g.setStroke(new BasicStroke(2));
-            g.drawArc(6, 3, 4, 6, 0, 180);
-            
-            // Punto de cerradura
-            g.setColor(Color.WHITE);
-            g.fillOval(7, 10, 2, 2);
+            // Estado bloqueado - Punto rojo discreto
+            g.setColor(new Color(200, 60, 60, 200));
+            g.fillOval(5, 5, 6, 6);
+            g.setColor(new Color(150, 40, 40, 255));
+            g.setStroke(new BasicStroke(1));
+            g.drawOval(5, 5, 6, 6);
+            g.setColor(new Color(255, 255, 255, 150));
+            g.fillOval(7, 7, 2, 2);
         } else {
-            // Candado abierto - VERDE
-            g.setColor(new Color(50, 200, 50));
-            
-            // Cuerpo del candado
-            g.fillRoundRect(4, 8, 8, 7, 2, 2);
-            
-            // Arco del candado (abierto - desplazado)
-            g.setStroke(new BasicStroke(2));
-            g.drawArc(6, 3, 4, 6, 0, 180);
-            g.drawLine(10, 5, 13, 3);
-            
-            // Punto de cerradura
-            g.setColor(Color.WHITE);
-            g.fillOval(7, 10, 2, 2);
+            // Estado desbloqueado - Punto verde discreto
+            g.setColor(new Color(60, 180, 60, 180));
+            g.fillOval(5, 5, 6, 6);
+            g.setColor(new Color(40, 130, 40, 255));
+            g.setStroke(new BasicStroke(1));
+            g.drawOval(5, 5, 6, 6);
+            g.setColor(new Color(255, 255, 255, 150));
+            g.fillOval(7, 7, 2, 2);
         }
         
         g.dispose();
@@ -171,13 +206,13 @@ public class TrayIcon {
             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
             
             🔑 Atajos de Teclado:
-               • F1 - Activar/Desactivar bloqueo
+               • Ctrl+Alt+L - Activar/Desactivar bloqueo
                • Doble clic en icono - Toggle bloqueo
             
             🔒 Cuando está Bloqueado:
-               • Mouse bloqueado en el centro
+               • Mouse bloqueado en esquina
                • Teclado completamente bloqueado
-               • Solo F1 funciona para desbloquear
+               • Solo Ctrl+Alt+L funciona para desbloquear
             
             💡 Consejos:
                • El icono cambia de color según el estado
